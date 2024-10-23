@@ -3,8 +3,8 @@ const ctx = canvas.getContext("2d");
 
 const box = 20;
 const snakeHead = {
-  x: (canvas.width - box) / 2,
-  y: (canvas.height - box) / 2,
+  x: canvas.width / 2,
+  y: canvas.height / 2,
 };
 let direction = "right";
 
@@ -25,8 +25,6 @@ function drawSquare(x, y, size, color) {
 
 
 function updateMove(direction) {
-
-
   switch (direction) {
     // haut
     case 'up':
@@ -88,6 +86,8 @@ function changeDirection(ev) {
           break;
       }
 }
+
+function checkCollision() <<<<<<<<<<<<<<<< 
 
 
 
