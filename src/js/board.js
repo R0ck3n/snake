@@ -6,10 +6,34 @@ const snakeHead = {
   x: canvas.width / 2,
   y: canvas.height / 2,
 };
-let direction = "right";
 
-let velocityX = box / 10;
+function getRandomDirection() {
+  const directions = ["right", "left", "up", "down"];
+  return directions[Math.floor(Math.random() * directions.length)];
+}
+
+let direction = getRandomDirection();
+let velocityX = 0;
 let velocityY = 0;
+
+switch (direction) {
+  case "right":
+    velocityX = box / 10;
+    velocityY = 0;
+    break;
+  case "left":
+    velocityX = -box / 10;
+    velocityY = 0;
+    break;
+  case "up":
+    velocityX = 0;
+    velocityY = -box / 10;
+    break;
+  case "down":
+    velocityX = 0;
+    velocityY = box / 10;
+    break;
+}
 
 const snakeHeadImg = new Image();
 snakeHeadImg.src = "../../public/snake_green_head_32.png";
@@ -51,16 +75,13 @@ function changeDirection(ev) {
   if (key === 38 && velocityY === 0) {
     velocityX = 0;
     velocityY = -box / 10;
-  }
-  if (key === 40 && velocityY === 0) {
+  } else if (key === 40 && velocityY === 0) {
     velocityX = 0;
     velocityY = box / 10;
-  }
-  if (key === 37 && velocityX === 0) {
+  } else if (key === 37 && velocityX === 0) {
     velocityX = -box / 10;
     velocityY = 0;
-  }
-  if (key === 39 && velocityX === 0) {
+  } else if (key === 39 && velocityX === 0) {
     velocityX = box / 10;
     velocityY = 0;
   }
