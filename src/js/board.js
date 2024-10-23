@@ -1,13 +1,12 @@
 const canvas = document.querySelector("#board-game");
 const ctx = canvas.getContext("2d");
 const box = 20;
-
 let food = getRandomPosition()
 
-const snakeHead = {
+const snake = [{
   x: canvas.width / 2,
   y: canvas.height / 2,
-};
+}];
 
 function getRandomDirection() {
   const directions = ["right", "left", "up", "down"];
@@ -40,8 +39,12 @@ switch (direction) {
 const snakeHeadImg = new Image();
 snakeHeadImg.src = "../../public/snake_green_head_32.png";
 
+const snakeBodyImg = new Image();
+snakeBodyImg.src = "../../public/snake_green_blob_32.png";
+
+
 function drawImage() {
-  ctx.drawImage(snakeHeadImg, snakeHead.x, snakeHead.y, box, box);
+  ctx.drawImage(snakeHeadImg, snake[0].x, snake[0].y, box, box);
 }
 
 function drawSquare(x, y, size, color) {
@@ -54,14 +57,27 @@ function drawFood() {
   ctx.fillRect(food.x,food.y, box, box);
 }
 
+function drawSnake() {
+  for (let i = 0; i < snake.length; i++) {
+    if (i===0) {
+      ctx.drawImage(snakeHeadImg, snake[i].x, snake[i].y, box, box);
+    }else {
+      console.log(snake[i].x,snake[i].y);
+      
+      ctx.drawImage(snakeBodyImg, snake[i-1].x, snake[i-1].y, box, box);
+    }
+    
+  }
+}
+
 function updateMove() {
-  snakeHead.x += velocityX;
-  snakeHead.y += velocityY;
+  snake[0].x += velocityX;
+  snake[0].y += velocityY;
 }
 
 function updateCanvas() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawImage();
+  drawSnake()
   drawFood()
 }
 
@@ -98,19 +114,19 @@ function changeDirection(ev) {
 function checkCollision() {
   // Vérifie si le serpent sort du canvas
   if (
-    snakeHead.x + box - 1 >= canvas.width ||
-    snakeHead.x < -1 ||
-    snakeHead.y + box - 1 >= canvas.height ||
-    snakeHead.y < -1
+    snake[0].x + box - 1 >= canvas.width ||
+    snake[0].x < -1 ||
+    snake[0].y + box - 1 >= canvas.height ||
+    snake[0].y < -1
   ) {
     return true;
   }
 
   // Détection de collision avec la pomme
-  const snakeLeft = snakeHead.x;
-  const snakeRight = snakeHead.x + box;
-  const snakeTop = snakeHead.y;
-  const snakeBottom = snakeHead.y + box;
+  const snakeLeft = snake[0].x;
+  const snakeRight = snake[0].x + box;
+  const snakeTop = snake[0].y;
+  const snakeBottom = snake[0].y + box;
 
   const foodLeft = food.x;
   const foodRight = food.x + box;
@@ -125,6 +141,7 @@ function checkCollision() {
     snakeTop < foodBottom
   ) {
     food = getRandomPosition();
+    snake.push({})
     // ajouter score ici
   }
 
