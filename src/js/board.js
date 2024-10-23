@@ -2,6 +2,7 @@ const canvas = document.querySelector("#board-game");
 const ctx = canvas.getContext("2d");
 const box = 20;
 let food = getRandomPosition();
+let lastKey;
 
 const snake = [{
   x: canvas.width / 2,
@@ -17,6 +18,9 @@ snakeHeadImg.src = "../../public/snake_green_head_32.png";
 const snakeBodyImg = new Image();
 snakeBodyImg.src = "../../public/snake_green_blob_32.png";
 
+const appleImg = new Image();
+appleImg.src = "../../public/apple_red_32.png";
+
 function drawSnake() {
   for (let i = 0; i < snake.length; i++) {
     if (i === 0) {
@@ -31,8 +35,10 @@ function drawSnake() {
 }
 
 function drawFood() {
-  ctx.fillStyle = 'red';
-  ctx.fillRect(food.x, food.y, box, box);
+  // ctx.fillStyle = 'red';
+  // ctx.fillRect(food.x, food.y, box, box);
+  ctx.drawImage(appleImg, food.x, food.y, box, box);
+
 }
 
 function updateMove() {
@@ -55,6 +61,8 @@ function updateMove() {
     snake[1].x = previousHeadX;
     snake[1].y = previousHeadY;
   }
+
+
 }
 
 function updateCanvas() {
@@ -77,7 +85,29 @@ function gameLoop() {
 
 function changeDirection(ev) {
   ev.preventDefault();
-  const key = ev.keyCode;
+  let key = ev.keyCode;
+
+  // haut : 38
+  // bas : 40
+  // Gauche : 37
+  // droite : 39
+
+  console.log(key);
+
+  if (lastKey === 37 && key === 37) {
+    key = 40;
+  }else if(lastKey === 40 && key === 37){
+    key = 39;
+  }else if(lastKey === 39 && key === 37){
+    key = 38;
+  }else if(lastKey === 39 && key === 39){
+    key = 40;
+  }else if(lastKey === 40 && key === 39){
+    key = 37;
+  }else if(lastKey === 37 && key === 39){
+    key = 38;
+  }
+  
 
   if (key === 38 && velocityY === 0) {
     velocityX = 0;
@@ -92,6 +122,9 @@ function changeDirection(ev) {
     velocityX = box; // Déplacement par la taille du bloc
     velocityY = 0;
   }
+
+  lastKey = key;
+
 }
 
 function checkCollision() {

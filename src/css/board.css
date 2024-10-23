@@ -1,15 +1,30 @@
 :root {
     --main-bg-color: black;
     --border-color : #fff;
+    --text-color : #fff;
   }
 
 body {
     background-color: var(--main-bg-color);
+    color: var(--text-color);
 }
 
+.flex {
+    display: flex;
+}
 
-header {
-    height: 5rem;
+.gap20 {
+    gap:2rem;
+}
+
+.radius5 {
+    border-radius: 10px;
+    overflow: hidden;
+}
+.start-text {
+    text-align: center;
+    font-size: 24px;
+    text-transform: uppercase;
 }
 
 
@@ -30,7 +45,8 @@ canvas {
 
 .leaderboard {
     width: 20rem;
-    height: 50rem;
+    min-height: 90%;
+
     border: 1px solid var(--border-color);
 }
 

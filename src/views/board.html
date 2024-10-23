@@ -7,18 +7,21 @@
     <link rel="stylesheet" href="../css/board.css">
 </head>
 <body>
-    <header></header>
+    <header>
+        
+            <h2 class="start-text" id="start-text">Appuyer sur une touche directionnelle pour commencer</h2>
+    </header>
     <main>
-        <div class="container">
-            <div class="board-container">
-                <canvas width="400" height="400" id="board-game"></canvas>
-                <div class="btn-container">
-                    <button id="start-btn">Start</button>
-                    <button id="stop-btn">Pause</button>
+            <div class="container">
+                <div class="board-container">
+                    <canvas width="400" height="400" id="board-game"></canvas>
+                    <div class="btn-container">
+                        <button id="start-btn">Start</button>
+                        <button id="stop-btn">Pause</button>
+                    </div>
                 </div>
+                <div class="leaderboard"></div>
             </div>
-            <div class="leaderboard"></div>
-        </div>
     </main>
     <footer></footer>
     <script src="../js/board.js"></script>
