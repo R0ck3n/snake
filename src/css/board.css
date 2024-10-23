@@ -1,0 +1,47 @@
+:root {
+    --main-bg-color: black;
+    --border-color : #fff;
+  }
+
+body {
+    background-color: var(--main-bg-color);
+}
+
+
+header {
+    height: 5rem;
+}
+
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    display: flex;
+    gap: 5rem;
+}
+
+canvas {
+    border: 1px solid var(--border-color);
+}
+
+.leaderboard {
+    width: 20rem;
+    height: 50rem;
+    border: 1px solid var(--border-color);
+}
+
+.btn-container {
+    padding: 2rem;
+    display: flex;
+    justify-content: space-around;
+}
+
+.board-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
