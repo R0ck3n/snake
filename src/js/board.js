@@ -18,7 +18,6 @@ function drawImage() {
   ctx.drawImage(snakeHeadImg, snakeHead.x, snakeHead.y, box, box);
 }
 
-/** Dessine un carré sur le canvas */
 function drawSquare(x, y, size, color) {
   ctx.fillStyle = color;
   ctx.fillRect(x, y, size, size);
@@ -39,8 +38,8 @@ function gameLoop() {
     alert("Game Over");
     return;
   } else {
-    updateMove();
     updateCanvas();
+    updateMove();
   }
   requestAnimationFrame(gameLoop);
 }
@@ -69,13 +68,14 @@ function changeDirection(ev) {
 
 function checkCollision() {
   if (
-    snakeHead.x >= canvas.width ||
-    snakeHead.x < 0 ||
-    snakeHead.y >= canvas.height ||
-    snakeHead.y < 0
+    snakeHead.x + box - 1 >= canvas.width ||
+    snakeHead.x < -1 ||
+    snakeHead.y + box - 1 >= canvas.height ||
+    snakeHead.y < -1
   ) {
     return true;
   }
+
   return false;
 }
 
