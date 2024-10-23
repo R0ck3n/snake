@@ -6,6 +6,9 @@ const snakeHead = {
   x: (canvas.width - box) / 2,
   y: (canvas.height - box) / 2,
 };
+let direction = "right";
+
+
 const snakeHeadImg = new Image();
 snakeHeadImg.src = "../../public/snake_green_head_32.png";
 
@@ -21,26 +24,26 @@ function drawSquare(x, y, size, color) {
 
 
 
-function move(key) {
+function updateMove(direction) {
 
 
-  switch (key) {
+  switch (direction) {
     // haut
-    case 38:
+    case 'up':
       snakeHead.y -= box;
       break;
     // bas
-    case 40:
+    case 'down':
         snakeHead.y += box;
       break;
 
     // gauche
-    case 37:
+    case 'left':
         snakeHead.x  -= box
       break;
 
     // droite
-    case 39:
+    case 'right':
       snakeHead.x  += box
       break;
   }
@@ -55,14 +58,47 @@ function updateCanvas() {
 function gameInterval () {
     const interval = setInterval(()=>{
         updateCanvas()
+        updateMove(direction)
     },150)
 }
 
-document.addEventListener("keydown", (ev) => {
-  ev.preventDefault();
-  move(ev.keyCode)
-  console.log(ev.keyCode);
-});
+function changeDirection(ev) {
+    ev.prev
+    const key = ev.keyCode;
+    console.log(key);
+    
+    switch (key) {
+        // haut
+        case 38:
+          direction = 'up'
+          break;
+        // bas
+        case 40:
+            direction ='down'
+          break;
+    
+        // gauche
+        case 37:
+            direction = 'left'
+          break;
+    
+        // droite
+        case 39:
+          direction = 'right'
+          break;
+      }
+}
+
+
+
+
+
+
+
+
+
+
+document.addEventListener("keydown", changeDirection);
 
 updateCanvas();
 gameInterval();
