@@ -8,7 +8,11 @@ const snakeHead = {
 };
 const snakeHeadImg = new Image();
 snakeHeadImg.src = '../../public/snake_green_head_32.png'
-ctx.drawImage(snakeHeadImg, snakeHead.x, snakeHead.y,box, box);
+
+
+snakeHeadImg.onload = () => {
+    ctx.drawImage(snakeHeadImg, snakeHead.x, snakeHead.y, box, box);
+  };
 
 
 /** Dessine un carré sur le canvas */
