@@ -8,12 +8,15 @@ const snakeHead = {
 };
 let direction = "right";
 
+let velocityX = box / 10;
+let velocityY = 0;
+
 const snakeHeadImg = new Image();
 snakeHeadImg.src = "../../public/snake_green_head_32.png";
 
-//snakeHeadImg.onload = () => {
-//     ctx.drawImage(snakeHeadImg, snakeHead.x, snakeHead.y, box, box);
-//   };
+function drawImage() {
+  ctx.drawImage(snakeHeadImg, snakeHead.x, snakeHead.y, box, box);
+}
 
 /** Dessine un carré sur le canvas */
 function drawSquare(x, y, size, color) {
@@ -21,69 +24,46 @@ function drawSquare(x, y, size, color) {
   ctx.fillRect(x, y, size, size);
 }
 
-function updateMove(direction) {
-  switch (direction) {
-    // haut
-    case "up":
-      snakeHead.y -= box;
-      break;
-    // bas
-    case "down":
-      snakeHead.y += box;
-      break;
-
-    // gauche
-    case "left":
-      snakeHead.x -= box;
-      break;
-
-    // droite
-    case "right":
-      snakeHead.x += box;
-      break;
-  }
+function updateMove() {
+  snakeHead.x += velocityX;
+  snakeHead.y += velocityY;
 }
 
 function updateCanvas() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawSquare(snakeHead.x, snakeHead.y, box, "white");
+  drawImage();
 }
 
-function gameInterval() {
-  const interval = setInterval(() => {
-    if (checkCollision()) {
-      clearInterval(interval);
-      alert("Game Over");
-    } else {
-      updateCanvas();
-
-      updateMove(direction);
-    }
-  }, 100);
+function gameLoop() {
+  if (checkCollision()) {
+    alert("Game Over");
+    return;
+  } else {
+    updateMove();
+    updateCanvas();
+  }
+  requestAnimationFrame(gameLoop);
 }
 
 function changeDirection(ev) {
   ev.preventDefault();
   const key = ev.keyCode;
-  switch (key) {
-    // haut
-    case 38:
-      direction = "up";
-      break;
-    // bas
-    case 40:
-      direction = "down";
-      break;
 
-    // gauche
-    case 37:
-      direction = "left";
-      break;
-
-    // droite
-    case 39:
-      direction = "right";
-      break;
+  if (key === 38 && velocityY === 0) {
+    velocityX = 0;
+    velocityY = -box / 10;
+  }
+  if (key === 40 && velocityY === 0) {
+    velocityX = 0;
+    velocityY = box / 10;
+  }
+  if (key === 37 && velocityX === 0) {
+    velocityX = -box / 10;
+    velocityY = 0;
+  }
+  if (key === 39 && velocityX === 0) {
+    velocityX = box / 10;
+    velocityY = 0;
   }
 }
 
@@ -96,11 +76,10 @@ function checkCollision() {
   ) {
     return true;
   }
-
   return false;
 }
 
 document.addEventListener("keydown", changeDirection);
 
 updateCanvas();
-gameInterval();
+gameLoop();
