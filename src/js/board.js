@@ -1,7 +1,9 @@
 const canvas = document.querySelector("#board-game");
 const ctx = canvas.getContext("2d");
-
 const box = 20;
+
+const food = getRandomPosition()
+
 const snakeHead = {
   x: canvas.width / 2,
   y: canvas.height / 2,
@@ -47,6 +49,11 @@ function drawSquare(x, y, size, color) {
   ctx.fillRect(x, y, size, size);
 }
 
+function drawFood() {
+  ctx.fillStyle = 'red';
+  ctx.fillRect(food.x,food.y, box, box);
+}
+
 function updateMove() {
   snakeHead.x += velocityX;
   snakeHead.y += velocityY;
@@ -55,6 +62,7 @@ function updateMove() {
 function updateCanvas() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawImage();
+  drawFood()
 }
 
 function gameLoop() {
@@ -96,9 +104,31 @@ function checkCollision() {
   ) {
     return true;
   }
+  console.log(snakeHead.x === food.x && snakeHead.y === food.y);
+  console.log('snake',snakeHead.x,snakeHead.y);
+  console.log('food',food.x,food.y);
+  
+
+  if(snakeHead.x === food.x && snakeHead.y === food.y){
+    food = getRandomPosition();
+    // ajouter score
+  }
 
   return false;
 }
+
+function getRandomPosition() {
+const x = Math.floor(Math.random() * canvas.width / box) * box
+const y = Math.floor(Math.random() * canvas.height / box) * box
+
+  return {x,y};
+}
+
+console.log(food.x,food.y);
+
+
+
+
 
 document.addEventListener("keydown", changeDirection);
 
