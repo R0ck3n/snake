@@ -2,7 +2,7 @@ const canvas = document.querySelector("#board-game");
 const ctx = canvas.getContext("2d");
 const box = 20;
 
-const food = getRandomPosition()
+let food = getRandomPosition()
 
 const snakeHead = {
   x: canvas.width / 2,
@@ -96,6 +96,7 @@ function changeDirection(ev) {
 }
 
 function checkCollision() {
+  // Vérifie si le serpent sort du canvas
   if (
     snakeHead.x + box - 1 >= canvas.width ||
     snakeHead.x < -1 ||
@@ -104,18 +105,32 @@ function checkCollision() {
   ) {
     return true;
   }
-  console.log(snakeHead.x === food.x && snakeHead.y === food.y);
-  console.log('snake',snakeHead.x,snakeHead.y);
-  console.log('food',food.x,food.y);
-  
 
-  if(snakeHead.x === food.x && snakeHead.y === food.y){
+  // Détection de collision avec la pomme
+  const snakeLeft = snakeHead.x;
+  const snakeRight = snakeHead.x + box;
+  const snakeTop = snakeHead.y;
+  const snakeBottom = snakeHead.y + box;
+
+  const foodLeft = food.x;
+  const foodRight = food.x + box;
+  const foodTop = food.y;
+  const foodBottom = food.y + box;
+
+  // Vérifie si les rectangles se chevauchent
+  if (
+    snakeRight > foodLeft &&
+    snakeLeft < foodRight &&
+    snakeBottom > foodTop &&
+    snakeTop < foodBottom
+  ) {
     food = getRandomPosition();
-    // ajouter score
+    // ajouter score ici
   }
 
   return false;
 }
+
 
 function getRandomPosition() {
 const x = Math.floor(Math.random() * canvas.width / box) * box
