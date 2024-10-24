@@ -223,7 +223,7 @@ startButton.addEventListener("click", () => {
 });
 
 
-console.log(``);
+console.log(`${urlAPI}leaderboards`);
 
 
 
