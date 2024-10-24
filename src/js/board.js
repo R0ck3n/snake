@@ -1,3 +1,5 @@
+const urlAPI = 'http://127.0.0.1:8000/';
+
 const score = document.getElementById("score");
 const startButton = document.getElementById("start-btn");
 const canvas = document.querySelector("#board-game");
@@ -6,6 +8,7 @@ const box = 20;
 let food = getRandomPosition();
 let lastKey;
 let isGameStart = false;
+
 
 const snake = [
   {
@@ -38,6 +41,15 @@ function drawSnake() {
       ctx.drawImage(snakeBodyImg, snake[i].x, snake[i].y, box, box);
     }
   }
+}
+
+async function get_all_scores() {
+  const response = await fetch(`${urlAPI}leaderboards`)
+  
+  console.log(response.ok);
+console.log(response.json());
+
+  return response.json();
 }
 
 function drawFood() {
@@ -209,5 +221,12 @@ startButton.addEventListener("click", () => {
       break;
   }
 });
+
+
+console.log(``);
+
+
+
+
 updateCanvas();
 gameLoop();
