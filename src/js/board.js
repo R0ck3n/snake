@@ -1,9 +1,11 @@
 const score = document.getElementById("score");
+const startButton = document.getElementById("start-btn");
 const canvas = document.querySelector("#board-game");
 const ctx = canvas.getContext("2d");
 const box = 20;
 let food = getRandomPosition();
 let lastKey;
+let isGameStart = false;
 
 const snake = [
   {
@@ -78,6 +80,7 @@ function gameLoop() {
 
   if (checkCollision()) {
     alert("Game Over");
+    prompt("Veuillez entrer votre nom : ");
     return;
   }
 
@@ -85,7 +88,7 @@ function gameLoop() {
 }
 
 function changeDirection(ev) {
-  ev.preventDefault();
+  // // ev.preventDefault();
   let key = ev.keyCode;
 
   // haut : 38
@@ -93,34 +96,55 @@ function changeDirection(ev) {
   // Gauche : 37
   // droite : 39
 
-  console.log(key);
+  if (isGameStart) {
+    // if (lastKey === 37 && key === 37) {
+    //   key = 40;
+    // } else if (lastKey === 40 && key === 37) {
+    //   key = 39;
+    // } else if (lastKey === 39 && key === 37) {
+    //   key = 38;
+    // } else if (lastKey === 39 && key === 39) {
+    //   key = 40;
+    // } else if (lastKey === 40 && key === 39) {
+    //   key = 37;
+    // } else if (lastKey === 37 && key === 39) {
+    //   key = 38;
+    // }
 
-  // if (lastKey === 37 && key === 37) {
-  //   key = 40;
-  // } else if (lastKey === 40 && key === 37) {
-  //   key = 39;
-  // } else if (lastKey === 39 && key === 37) {
-  //   key = 38;
-  // } else if (lastKey === 39 && key === 39) {
-  //   key = 40;
-  // } else if (lastKey === 40 && key === 39) {
-  //   key = 37;
-  // } else if (lastKey === 37 && key === 39) {
-  //   key = 38;
-  // }
+    if (key === 38 && velocityY === 0) {
+      velocityX = 0;
+      velocityY = -box; // Déplacement par la taille du bloc
+    } else if (key === 40 && velocityY === 0) {
+      velocityX = 0;
+      velocityY = box; // Déplacement par la taille du bloc
+    } else if (key === 37 && velocityX === 0) {
+      velocityX = -box; // Déplacement par la taille du bloc
+      velocityY = 0;
+    } else if (key === 39 && velocityX === 0) {
+      velocityX = box; // Déplacement par la taille du bloc
+      velocityY = 0;
+    }
+  } else if (key === 32) {
+    isGameStart = true;
+    const random = Math.floor(Math.random() * 4) + 1;
 
-  if (key === 38 && velocityY === 0) {
-    velocityX = 0;
-    velocityY = -box; // Déplacement par la taille du bloc
-  } else if (key === 40 && velocityY === 0) {
-    velocityX = 0;
-    velocityY = box; // Déplacement par la taille du bloc
-  } else if (key === 37 && velocityX === 0) {
-    velocityX = -box; // Déplacement par la taille du bloc
-    velocityY = 0;
-  } else if (key === 39 && velocityX === 0) {
-    velocityX = box; // Déplacement par la taille du bloc
-    velocityY = 0;
+    switch (random) {
+      case 1:
+        velocityX = 10;
+        break;
+      case 2:
+        velocityX = -10;
+        break;
+      case 3:
+        velocityY = 10;
+        break;
+      case 4:
+        velocityY = -10;
+        break;
+      default:
+        velocityX = 10;
+        break;
+    }
   }
 
   lastKey = key;
@@ -163,6 +187,27 @@ function getRandomPosition() {
 }
 
 document.addEventListener("keydown", changeDirection);
+startButton.addEventListener("click", () => {
+  isGameStart = true;
+  const random = Math.floor(Math.random() * 4) + 1;
 
+  switch (random) {
+    case 1:
+      velocityX = 10;
+      break;
+    case 2:
+      velocityX = -10;
+      break;
+    case 3:
+      velocityY = 10;
+      break;
+    case 4:
+      velocityY = -10;
+      break;
+    default:
+      velocityX = 10;
+      break;
+  }
+});
 updateCanvas();
 gameLoop();
