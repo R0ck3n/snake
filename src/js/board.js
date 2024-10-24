@@ -222,7 +222,7 @@ startButton.addEventListener("click", () => {
       break;
   }
 });
-
+console.log(`${urlAPI}leaderboards`);
 function storeUserScoreInLocalStorage(name, score) {
   const scores = JSON.parse(localStorage.getItem("scores")) || [];
   scores.push({ name, score });
