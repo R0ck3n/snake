@@ -1,13 +1,18 @@
+const score = document.getElementById("score");
 const canvas = document.querySelector("#board-game");
 const ctx = canvas.getContext("2d");
 const box = 20;
 let food = getRandomPosition();
 let lastKey;
 
-const snake = [{
-  x: canvas.width / 2,
-  y: canvas.height / 2,
-}];
+const snake = [
+  {
+    x: canvas.width / 2,
+    y: canvas.height / 2,
+  },
+];
+
+score.textContent = snake.length - 1;
 
 let velocityX = 0;
 let velocityY = 0;
@@ -28,9 +33,8 @@ function drawSnake() {
       ctx.drawImage(snakeHeadImg, snake[i].x, snake[i].y, box, box);
     } else {
       // Dessiner le corps du serpent
-       ctx.drawImage(snakeBodyImg, snake[i].x, snake[i].y, box, box);
+      ctx.drawImage(snakeBodyImg, snake[i].x, snake[i].y, box, box);
     }
-
   }
 }
 
@@ -38,14 +42,13 @@ function drawFood() {
   // ctx.fillStyle = 'red';
   // ctx.fillRect(food.x, food.y, box, box);
   ctx.drawImage(appleImg, food.x, food.y, box, box);
-
 }
 
 function updateMove() {
   // Enregistrer les anciennes positions de la tête
   const previousHeadX = snake[0].x;
   const previousHeadY = snake[0].y;
-  
+
   // Mettre à jour la position de la tête
   snake[0].x += velocityX;
   snake[0].y += velocityY;
@@ -61,8 +64,6 @@ function updateMove() {
     snake[1].x = previousHeadX;
     snake[1].y = previousHeadY;
   }
-
-
 }
 
 function updateCanvas() {
@@ -74,7 +75,7 @@ function updateCanvas() {
 function gameLoop() {
   updateMove();
   updateCanvas();
-  
+
   if (checkCollision()) {
     alert("Game Over");
     return;
@@ -94,20 +95,19 @@ function changeDirection(ev) {
 
   console.log(key);
 
-  if (lastKey === 37 && key === 37) {
-    key = 40;
-  }else if(lastKey === 40 && key === 37){
-    key = 39;
-  }else if(lastKey === 39 && key === 37){
-    key = 38;
-  }else if(lastKey === 39 && key === 39){
-    key = 40;
-  }else if(lastKey === 40 && key === 39){
-    key = 37;
-  }else if(lastKey === 37 && key === 39){
-    key = 38;
-  }
-  
+  // if (lastKey === 37 && key === 37) {
+  //   key = 40;
+  // } else if (lastKey === 40 && key === 37) {
+  //   key = 39;
+  // } else if (lastKey === 39 && key === 37) {
+  //   key = 38;
+  // } else if (lastKey === 39 && key === 39) {
+  //   key = 40;
+  // } else if (lastKey === 40 && key === 39) {
+  //   key = 37;
+  // } else if (lastKey === 37 && key === 39) {
+  //   key = 38;
+  // }
 
   if (key === 38 && velocityY === 0) {
     velocityX = 0;
@@ -124,7 +124,6 @@ function changeDirection(ev) {
   }
 
   lastKey = key;
-
 }
 
 function checkCollision() {
@@ -149,7 +148,7 @@ function checkCollision() {
   if (snake[0].x === food.x && snake[0].y === food.y) {
     // Ajouter un nouveau segment à la fin du serpent
     snake.push({ x: snake[snake.length - 1].x, y: snake[snake.length - 1].y });
-    
+    score.textContent = snake.length - 1;
     // Générer une nouvelle position pour la nourriture
     food = getRandomPosition();
   }
@@ -158,8 +157,8 @@ function checkCollision() {
 }
 
 function getRandomPosition() {
-  const x = Math.floor(Math.random() * canvas.width / box) * box;
-  const y = Math.floor(Math.random() * canvas.height / box) * box;
+  const x = Math.floor((Math.random() * canvas.width) / box) * box;
+  const y = Math.floor((Math.random() * canvas.height) / box) * box;
   return { x, y };
 }
 

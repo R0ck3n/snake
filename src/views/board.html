@@ -1,29 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Boardgame</title>
-    <link rel="stylesheet" href="../css/board.css">
-</head>
-<body>
+    <link rel="stylesheet" href="../css/board.css" />
+  </head>
+  <body>
     <header>
-        
-            <h2 class="start-text" id="start-text">Appuyer sur une touche directionnelle pour commencer</h2>
+      <div
+        style="
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+        "
+      >
+        <h2 class="start-text" id="start-text">
+          Appuyer sur une touche directionnelle pour commencer
+        </h2>
+        <p>Score : <span id="score"></span></p>
+      </div>
     </header>
     <main>
-            <div class="container">
-                <div class="board-container">
-                    <canvas width="400" height="400" id="board-game"></canvas>
-                    <div class="btn-container">
-                        <button id="start-btn">Start</button>
-                        <button id="stop-btn">Pause</button>
-                    </div>
-                </div>
-                <div class="leaderboard"></div>
-            </div>
+      <div class="container">
+        <div class="board-container">
+          <canvas width="400" height="400" id="board-game"></canvas>
+          <div class="btn-container">
+            <button id="start-btn">Start</button>
+            <button id="stop-btn">Pause</button>
+          </div>
+        </div>
+        <div class="leaderboard"></div>
+      </div>
     </main>
     <footer></footer>
     <script src="../js/board.js"></script>
-</body>
+  </body>
 </html>
