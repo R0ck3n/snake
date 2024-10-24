@@ -1,4 +1,4 @@
-const urlAPI = 'http://127.0.0.1:8000/';
+const urlAPI = "http://127.0.0.1:8000/";
 
 const score = document.getElementById("score");
 const startButton = document.getElementById("start-btn");
@@ -8,7 +8,7 @@ const box = 20;
 let food = getRandomPosition();
 let lastKey;
 let isGameStart = false;
-
+let user;
 
 const snake = [
   {
@@ -44,10 +44,10 @@ function drawSnake() {
 }
 
 async function get_all_scores() {
-  const response = await fetch(`${urlAPI}leaderboards`)
-  
+  const response = await fetch(`${urlAPI}leaderboards`);
+
   console.log(response.ok);
-console.log(response.json());
+  console.log(response.json());
 
   return response.json();
 }
@@ -92,7 +92,8 @@ function gameLoop() {
 
   if (checkCollision()) {
     alert("Game Over");
-    prompt("Veuillez entrer votre nom : ");
+    const user = prompt("Veuillez entrer votre nom : ");
+    storeUserScoreInLocalStorage(user, snake.length - 1);
     return;
   }
 
@@ -222,11 +223,11 @@ startButton.addEventListener("click", () => {
   }
 });
 
-
-console.log(``);
-
-
-
+function storeUserScoreInLocalStorage(name, score) {
+  const scores = JSON.parse(localStorage.getItem("scores")) || [];
+  scores.push({ name, score });
+  localStorage.setItem("scores", JSON.stringify(scores));
+}
 
 updateCanvas();
 gameLoop();
