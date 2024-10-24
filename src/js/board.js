@@ -2,6 +2,7 @@ const urlAPI = "http://127.0.0.1:8000/";
 
 const score = document.getElementById("score");
 const startButton = document.getElementById("start-btn");
+const leaderboardList = document.querySelector(".leaderboard_list");
 const canvas = document.querySelector("#board-game");
 const ctx = canvas.getContext("2d");
 const box = 20;
@@ -94,6 +95,8 @@ function gameLoop() {
     alert("Game Over");
     const user = prompt("Veuillez entrer votre nom : ");
     storeUserScoreInLocalStorage(user, snake.length - 1);
+    emptyList();
+    displayScoresIntoLeaderboard();
     return;
   }
 
@@ -222,12 +225,40 @@ startButton.addEventListener("click", () => {
       break;
   }
 });
-console.log(`${urlAPI}leaderboards`);
+
 function storeUserScoreInLocalStorage(name, score) {
   const scores = JSON.parse(localStorage.getItem("scores")) || [];
   scores.push({ name, score });
   localStorage.setItem("scores", JSON.stringify(scores));
 }
 
+function getAllScoresFromLocalStorage() {
+  return JSON.parse(localStorage.getItem("scores")) || [];
+}
+
+function displayScoresIntoLeaderboard() {
+  const scores = getAllScoresFromLocalStorage();
+  const orderedScore = order(scores);
+
+  if (scores.length === 0) {
+    leaderboardList.textContent = "No Scores";
+  }
+
+  orderedScore.forEach((score) => {
+    const li = document.createElement("li");
+    li.textContent = score.name + ": " + score.score;
+    leaderboardList.appendChild(li);
+  });
+}
+
+function order(list) {
+  return list.sort((a, b) => b.score - a.score);
+}
+
+function emptyList() {
+  leaderboardList.innerHTML = "";
+}
+
+displayScoresIntoLeaderboard();
 updateCanvas();
 gameLoop();
