@@ -1,4 +1,8 @@
 const urlAPI = "http://127.0.0.1:8000/";
+const params = new URLSearchParams(window.location.search);
+const lvl = parseInt(params.get('lvl'));
+const lvlDifficulties = [200,150,100];
+
 
 const score = document.getElementById("score");
 const startButton = document.getElementById("start-btn");
@@ -100,7 +104,7 @@ function gameLoop() {
     return;
   }
 
-  setTimeout(gameLoop, 100); // Boucle de jeu avec un délai pour gérer le rythme
+  setTimeout(gameLoop, lvlDifficulties[lvl]); // Boucle de jeu avec un délai pour gérer le rythme
 }
 
 function changeDirection(ev) {

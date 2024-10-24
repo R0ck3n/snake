@@ -40,7 +40,7 @@ ul {
 .hero_button {
   display: flex;
   justify-content: center;
-
+  cursor: pointer;
   width: 15rem;
   color: #141414;
   text-decoration: none;
@@ -53,4 +53,10 @@ ul {
 .hero_button.not_allowed {
   opacity: 0.1;
   cursor:  not-allowed;
+}
+
+.options {
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
 }
