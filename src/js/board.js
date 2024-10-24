@@ -1,9 +1,9 @@
 const urlAPI = "http://127.0.0.1:8000/";
 const params = new URLSearchParams(window.location.search);
-const lvl = parseInt(params.get('lvl'));
-const lvlDifficulties = [200,150,100];
-
-
+const lvl = parseInt(params.get("lvl"));
+const movedifficulty = [200, 150, 100];
+const foodTimerDifficulty = [6000, 3000, 2000];
+const resetBtn = document.querySelector("#reset-btn");
 const score = document.getElementById("score");
 const startButton = document.getElementById("start-btn");
 const leaderboardList = document.querySelector(".leaderboard_list");
@@ -14,6 +14,13 @@ let food = getRandomPosition();
 let lastKey;
 let isGameStart = false;
 let user;
+let foodTimer;
+let proControls = false;
+const checkboxControls = document.querySelector("#control-options");
+
+checkboxControls.addEventListener("change", () => {
+  proControls = checkboxControls.checked;
+});
 
 const snake = [
   {
@@ -39,46 +46,29 @@ appleImg.src = "../../public/apple_red_32.png";
 function drawSnake() {
   for (let i = 0; i < snake.length; i++) {
     if (i === 0) {
-      // Dessiner la tête du serpent
       ctx.drawImage(snakeHeadImg, snake[i].x, snake[i].y, box, box);
     } else {
-      // Dessiner le corps du serpent
       ctx.drawImage(snakeBodyImg, snake[i].x, snake[i].y, box, box);
     }
   }
 }
 
-async function get_all_scores() {
-  const response = await fetch(`${urlAPI}leaderboards`);
-
-  console.log(response.ok);
-  console.log(response.json());
-
-  return response.json();
-}
-
 function drawFood() {
-  // ctx.fillStyle = 'red';
-  // ctx.fillRect(food.x, food.y, box, box);
   ctx.drawImage(appleImg, food.x, food.y, box, box);
 }
 
 function updateMove() {
-  // Enregistrer les anciennes positions de la tête
   const previousHeadX = snake[0].x;
   const previousHeadY = snake[0].y;
 
-  // Mettre à jour la position de la tête
   snake[0].x += velocityX;
   snake[0].y += velocityY;
 
-  // Mettre à jour les segments du corps pour qu'ils suivent la tête
   for (let i = snake.length - 1; i > 0; i--) {
     snake[i].x = snake[i - 1].x;
     snake[i].y = snake[i - 1].y;
   }
 
-  // Mettre à jour la position du premier segment avec l'ancienne position de la tête
   if (snake.length > 1) {
     snake[1].x = previousHeadX;
     snake[1].y = previousHeadY;
@@ -104,11 +94,10 @@ function gameLoop() {
     return;
   }
 
-  setTimeout(gameLoop, lvlDifficulties[lvl]); // Boucle de jeu avec un délai pour gérer le rythme
+  setTimeout(gameLoop, movedifficulty[lvl]);
 }
 
 function changeDirection(ev) {
-  // // ev.preventDefault();
   let key = ev.keyCode;
 
   // haut : 38
@@ -117,52 +106,55 @@ function changeDirection(ev) {
   // droite : 39
 
   if (isGameStart) {
-    // if (lastKey === 37 && key === 37) {
-    //   key = 40;
-    // } else if (lastKey === 40 && key === 37) {
-    //   key = 39;
-    // } else if (lastKey === 39 && key === 37) {
-    //   key = 38;
-    // } else if (lastKey === 39 && key === 39) {
-    //   key = 40;
-    // } else if (lastKey === 40 && key === 39) {
-    //   key = 37;
-    // } else if (lastKey === 37 && key === 39) {
-    //   key = 38;
-    // }
+    if (proControls) {
+      if (lastKey === 37 && key === 37) {
+        key = 40;
+      } else if (lastKey === 40 && key === 37) {
+        key = 39;
+      } else if (lastKey === 39 && key === 37) {
+        key = 38;
+      } else if (lastKey === 39 && key === 39) {
+        key = 40;
+      } else if (lastKey === 40 && key === 39) {
+        key = 37;
+      } else if (lastKey === 37 && key === 39) {
+        key = 38;
+      }
+    }
 
     if (key === 38 && velocityY === 0) {
       velocityX = 0;
-      velocityY = -box; // Déplacement par la taille du bloc
+      velocityY = -box;
     } else if (key === 40 && velocityY === 0) {
       velocityX = 0;
-      velocityY = box; // Déplacement par la taille du bloc
+      velocityY = box;
     } else if (key === 37 && velocityX === 0) {
-      velocityX = -box; // Déplacement par la taille du bloc
+      velocityX = -box;
       velocityY = 0;
     } else if (key === 39 && velocityX === 0) {
-      velocityX = box; // Déplacement par la taille du bloc
+      velocityX = box;
       velocityY = 0;
     }
   } else if (key === 32) {
     isGameStart = true;
+    resetFoodTimer();
     const random = Math.floor(Math.random() * 4) + 1;
 
     switch (random) {
       case 1:
-        velocityX = 10;
+        velocityX = box;
         break;
       case 2:
-        velocityX = -10;
+        velocityX = -box;
         break;
       case 3:
-        velocityY = 10;
+        velocityY = box;
         break;
       case 4:
-        velocityY = -10;
+        velocityY = -box;
         break;
       default:
-        velocityX = 10;
+        velocityX = box;
         break;
     }
   }
@@ -171,7 +163,6 @@ function changeDirection(ev) {
 }
 
 function checkCollision() {
-  // Vérifie si le serpent sort du canvas
   if (
     snake[0].x >= canvas.width ||
     snake[0].x < 0 ||
@@ -181,20 +172,19 @@ function checkCollision() {
     return true;
   }
 
-  // Détection de collision avec le corps du serpent
   for (let i = 1; i < snake.length; i++) {
     if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
       return true;
     }
   }
 
-  // Détection de collision avec la nourriture
-  if (snake[0].x === food.x && snake[0].y === food.y) {
-    // Ajouter un nouveau segment à la fin du serpent
+  const distanceX = Math.abs(snake[0].x - food.x);
+  const distanceY = Math.abs(snake[0].y - food.y);
+  if (distanceX < box && distanceY < box) {
     snake.push({ x: snake[snake.length - 1].x, y: snake[snake.length - 1].y });
     score.textContent = snake.length - 1;
-    // Générer une nouvelle position pour la nourriture
     food = getRandomPosition();
+    resetFoodTimer(); // Réinitialiser le timer pour la nourriture
   }
 
   return false;
@@ -206,28 +196,39 @@ function getRandomPosition() {
   return { x, y };
 }
 
+function resetFoodTimer() {
+  clearTimeout(foodTimer);
+  foodTimer = setTimeout(() => {
+    food = getRandomPosition();
+    resetFoodTimer();
+  }, foodTimerDifficulty[lvl]); // timer reset food 3s
+}
+
 document.addEventListener("keydown", changeDirection);
 startButton.addEventListener("click", () => {
   isGameStart = true;
+  resetFoodTimer();
   const random = Math.floor(Math.random() * 4) + 1;
 
   switch (random) {
     case 1:
-      velocityX = 10;
+      velocityX = box;
       break;
     case 2:
-      velocityX = -10;
+      velocityX = -box;
       break;
     case 3:
-      velocityY = 10;
+      velocityY = box;
       break;
     case 4:
-      velocityY = -10;
+      velocityY = -box;
       break;
     default:
-      velocityX = 10;
+      velocityX = box;
       break;
   }
+
+  resetFoodTimer(); // Démarrer le timer pour la nourriture au début du jeu
 });
 
 function storeUserScoreInLocalStorage(name, score) {
@@ -256,12 +257,16 @@ function displayScoresIntoLeaderboard() {
 }
 
 function order(list) {
-  return list.sort((a, b) => b.score - a.score);
+  return list.sort((a, b) => b.score - a.score).slice(0, 5);
 }
 
 function emptyList() {
   leaderboardList.innerHTML = "";
 }
+
+resetBtn.addEventListener("click", () => {
+  window.location.reload();
+});
 
 displayScoresIntoLeaderboard();
 updateCanvas();
