@@ -12,5 +12,5 @@ optionBtn.addEventListener('click',()=>{
 lvlPickers.forEach(lvlBtn=>lvlBtn.addEventListener('click',()=>{
     heroList.style.display='flex'
     options.style.display='none'
-    singleStartBtn.href += `?lvl=${lvlBtn.value}`
+    singleStartBtn.href = `/src/views/board.html?lvl=${lvlBtn.value}`
 }))
